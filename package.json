@@ -1,0 +1,30 @@
+{
+  "name": "@umm/semver",
+  "version": "1.0.0",
+  "description": "A semver implementation in .Net based on the v2.0.0 of the spec found at http://semver.org/.",
+  "homepage": "https://github.com/umm-projects/semver",
+  "bugs": {
+    "url": "https://github.com/umm-projects/semver/issues"
+  },
+  "scripts": {
+    "umm:init": "umm-init",
+    "umm:generate_assembly_definition": "umm-generate_assembly_definition",
+    "umm:module:install": "umm-module-install",
+    "umm:module:uninstall": "umm-module-uninstall",
+    "postinstall": "npm run --silent umm:module:install src/Semver/SemVersion.cs src/Semver/AssemblyDefinition.asmdef",
+    "postuninstall": "npm run --silent umm:module:uninstall"
+  },
+  "author": "Max Hauser",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:umm-projects/semver"
+  },
+  "files": [
+    "src"
+  ],
+  "dependencies": {
+    "@umm/scripts": "umm-projects/scripts#^1.0.0"
+  },
+  "devDependencies": {}
+}
