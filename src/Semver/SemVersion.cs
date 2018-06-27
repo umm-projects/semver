@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 #if !NETSTANDARD
 using System.Globalization;
 using System.Runtime.Serialization;
@@ -16,6 +17,8 @@ namespace Semver
         Patch      = 0x01 << 2,
         Prerelease = 0x01 << 3,
         Build      = 0x01 << 4,
+        All        = Major | Minor | Patch | Prerelease | Build,
+        Released   = Major | Minor | Patch,
     }
 
     /// <summary>
@@ -81,7 +84,7 @@ namespace Semver
         /// <summary>
         /// Initializes a new instance of the <see cref="SemVersion"/> class.
         /// </summary>
-        /// <param name="version">The <see cref="System.Version"/> that is used to initialize 
+        /// <param name="version">The <see cref="System.Version"/> that is used to initialize
         /// the Major, Minor, Patch and Build properties.</param>
         public SemVersion(Version version)
         {
@@ -129,7 +132,7 @@ namespace Semver
 
             var minorMatch = match.Groups["minor"];
             int minor = 0;
-            if (minorMatch.Success) 
+            if (minorMatch.Success)
             {
 #if NETSTANDARD
                 minor = int.Parse(minorMatch.Value);
@@ -152,7 +155,7 @@ namespace Semver
                 patch = int.Parse(patchMatch.Value, CultureInfo.InvariantCulture);
 #endif
             }
-            else if (strict) 
+            else if (strict)
             {
                 throw new InvalidOperationException("Invalid version (no patch version given in strict mode)");
             }
@@ -167,8 +170,8 @@ namespace Semver
         /// Parses the specified string to a semantic version.
         /// </summary>
         /// <param name="version">The version string.</param>
-        /// <param name="semver">When the method returns, contains a SemVersion instance equivalent 
-        /// to the version string passed in, if the version string was valid, or <c>null</c> if the 
+        /// <param name="semver">When the method returns, contains a SemVersion instance equivalent
+        /// to the version string passed in, if the version string was valid, or <c>null</c> if the
         /// version string was not valid.</param>
         /// <param name="strict">If set to <c>true</c> minor and patch version are required, else they default to 0.</param>
         /// <returns><c>False</c> when a invalid version string is passed, otherwise <c>true</c>.</returns>
@@ -214,7 +217,7 @@ namespace Semver
         }
 
         /// <summary>
-        /// Make a copy of the current instance with optional altered fields. 
+        /// Make a copy of the current instance with optional altered fields.
         /// </summary>
         /// <param name="major">The major version.</param>
         /// <param name="minor">The minor version.</param>
@@ -290,15 +293,65 @@ namespace Semver
         }
 
         /// <summary>
-        /// Compares the current instance with another object of the same type and returns an integer that indicates 
-        /// whether the current instance precedes, follows, or occurs in the same position in the sort order as the 
+        /// Returns a <see cref="System.String" /> that represents this instance with DigitType flags.
+        /// </summary>
+        /// <param name="digitType">DigitType flags</param>
+        /// <param name="truncate">Set true if need trim right digit</param>
+        /// <returns>Returns a <see cref="System.String" /> that represents this instance with DigitType flags.</returns>
+        public string ToString(DigitType digitType, bool truncate = false)
+        {
+            var builder = new StringBuilder();
+
+            if ((digitType & DigitType.Major) > 0)
+            {
+                builder.Append(this.Major);
+            }
+            else if (digitType > DigitType.Major || !truncate)
+            {
+                builder.Append(0);
+            }
+
+            if ((digitType & DigitType.Minor) > 0)
+            {
+                builder.AppendFormat(".{0}", this.Minor);
+            }
+            else if (digitType > DigitType.Minor || !truncate)
+            {
+                builder.Append(".0");
+            }
+
+            if ((digitType & DigitType.Patch) > 0)
+            {
+                builder.AppendFormat(".{0}", this.Patch);
+            }
+            else if (digitType > DigitType.Patch || !truncate)
+            {
+                builder.Append(".0");
+            }
+
+            if ((digitType & DigitType.Prerelease) > 0)
+            {
+                builder.AppendFormat("-{0}", this.Prerelease);
+            }
+
+            if ((digitType & DigitType.Build) > 0)
+            {
+                builder.AppendFormat("+{0}", this.Build);
+            }
+
+            return builder.ToString();
+        }
+
+        /// <summary>
+        /// Compares the current instance with another object of the same type and returns an integer that indicates
+        /// whether the current instance precedes, follows, or occurs in the same position in the sort order as the
         /// other object.
         /// </summary>
         /// <param name="obj">An object to compare with this instance.</param>
         /// <returns>
-        /// A value that indicates the relative order of the objects being compared. 
-        /// The return value has these meanings: Value Meaning Less than zero 
-        ///  This instance precedes <paramref name="obj" /> in the sort order. 
+        /// A value that indicates the relative order of the objects being compared.
+        /// The return value has these meanings: Value Meaning Less than zero
+        ///  This instance precedes <paramref name="obj" /> in the sort order.
         ///  Zero This instance occurs in the same position in the sort order as <paramref name="obj" />. i
         ///  Greater than zero This instance follows <paramref name="obj" /> in the sort order.
         /// </returns>
@@ -308,15 +361,15 @@ namespace Semver
         }
 
         /// <summary>
-        /// Compares the current instance with another object of the same type and returns an integer that indicates 
-        /// whether the current instance precedes, follows, or occurs in the same position in the sort order as the 
+        /// Compares the current instance with another object of the same type and returns an integer that indicates
+        /// whether the current instance precedes, follows, or occurs in the same position in the sort order as the
         /// other object.
         /// </summary>
         /// <param name="other">An object to compare with this instance.</param>
         /// <returns>
-        /// A value that indicates the relative order of the objects being compared. 
-        /// The return value has these meanings: Value Meaning Less than zero 
-        ///  This instance precedes <paramref name="other" /> in the sort order. 
+        /// A value that indicates the relative order of the objects being compared.
+        /// The return value has these meanings: Value Meaning Less than zero
+        ///  This instance precedes <paramref name="other" /> in the sort order.
         ///  Zero This instance occurs in the same position in the sort order as <paramref name="other" />. i
         ///  Greater than zero This instance follows <paramref name="other" /> in the sort order.
         /// </returns>
@@ -348,8 +401,8 @@ namespace Semver
         /// </summary>
         /// <param name="other">The semantic version.</param>
         /// <returns>
-        /// A value that indicates the relative order of the objects being compared. 
-        /// The return value has these meanings: Value Meaning Less than zero 
+        /// A value that indicates the relative order of the objects being compared.
+        /// The return value has these meanings: Value Meaning Less than zero
         ///  This instance precedes <paramref name="other" /> in the version precedence.
         ///  Zero This instance has the same precedence as <paramref name="other" />. i
         ///  Greater than zero This instance has creater precedence as <paramref name="other" />.
@@ -444,7 +497,7 @@ namespace Semver
         /// Returns a hash code for this instance.
         /// </summary>
         /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
         /// </returns>
         public override int GetHashCode()
         {
@@ -479,7 +532,7 @@ namespace Semver
         }
 
         /// <summary>
-        /// The override of the equals operator. 
+        /// The override of the equals operator.
         /// </summary>
         /// <param name="left">The left value.</param>
         /// <param name="right">The right value.</param>
@@ -490,7 +543,7 @@ namespace Semver
         }
 
         /// <summary>
-        /// The override of the un-equal operator. 
+        /// The override of the un-equal operator.
         /// </summary>
         /// <param name="left">The left value.</param>
         /// <param name="right">The right value.</param>
@@ -501,7 +554,7 @@ namespace Semver
         }
 
         /// <summary>
-        /// The override of the greater operator. 
+        /// The override of the greater operator.
         /// </summary>
         /// <param name="left">The left value.</param>
         /// <param name="right">The right value.</param>
@@ -512,7 +565,7 @@ namespace Semver
         }
 
         /// <summary>
-        /// The override of the greater than or equal operator. 
+        /// The override of the greater than or equal operator.
         /// </summary>
         /// <param name="left">The left value.</param>
         /// <param name="right">The right value.</param>
@@ -523,7 +576,7 @@ namespace Semver
         }
 
         /// <summary>
-        /// The override of the less operator. 
+        /// The override of the less operator.
         /// </summary>
         /// <param name="left">The left value.</param>
         /// <param name="right">The right value.</param>
@@ -534,7 +587,7 @@ namespace Semver
         }
 
         /// <summary>
-        /// The override of the less than or equal operator. 
+        /// The override of the less than or equal operator.
         /// </summary>
         /// <param name="left">The left value.</param>
         /// <param name="right">The right value.</param>
