@@ -271,22 +271,22 @@ namespace Semver.Test
             Assert.Equal("1.2.0", version.ToString(DigitType.Major | DigitType.Minor));
             Assert.Equal("1.0.3", version.ToString(DigitType.Major | DigitType.Patch));
             Assert.Equal("1.0.0", version.ToString(DigitType.Major));
-            Assert.Equal("1.2", version.ToString(DigitType.Major | DigitType.Minor), true);
-            Assert.Equal("1", version.ToString(DigitType.Major), true);
+            Assert.Equal("1.2", version.ToString(DigitType.Major | DigitType.Minor, true));
+            Assert.Equal("1", version.ToString(DigitType.Major, true));
             Assert.Equal("1.2.3+dev-mha.120", version.ToString(DigitType.Major | DigitType.Minor | DigitType.Patch | DigitType.Build));
             Assert.Equal("1.2.0+dev-mha.120", version.ToString(DigitType.Major | DigitType.Minor | DigitType.Build));
             Assert.Equal("1.0.3+dev-mha.120", version.ToString(DigitType.Major | DigitType.Patch | DigitType.Build));
             Assert.Equal("1.0.0+dev-mha.120", version.ToString(DigitType.Major | DigitType.Build));
-            Assert.Equal("1.2.0+dev-mha.120", version.ToString(DigitType.Major | DigitType.Minor | DigitType.Build), true);
-            Assert.Equal("1.0.3+dev-mha.120", version.ToString(DigitType.Major | DigitType.Patch | DigitType.Build), true);
-            Assert.Equal("1.0.0+dev-mha.120", version.ToString(DigitType.Major | DigitType.Build), true);
+            Assert.Equal("1.2.0+dev-mha.120", version.ToString(DigitType.Major | DigitType.Minor | DigitType.Build, true));
+            Assert.Equal("1.0.3+dev-mha.120", version.ToString(DigitType.Major | DigitType.Patch | DigitType.Build, true));
+            Assert.Equal("1.0.0+dev-mha.120", version.ToString(DigitType.Major | DigitType.Build, true));
             Assert.Equal("1.2.3-beta", version.ToString(DigitType.Major | DigitType.Minor | DigitType.Patch | DigitType.Prerelease));
             Assert.Equal("1.2.0-beta", version.ToString(DigitType.Major | DigitType.Minor | DigitType.Prerelease));
             Assert.Equal("1.0.3-beta", version.ToString(DigitType.Major | DigitType.Patch | DigitType.Prerelease));
             Assert.Equal("1.0.0-beta", version.ToString(DigitType.Major | DigitType.Prerelease));
-            Assert.Equal("1.2.0-beta", version.ToString(DigitType.Major | DigitType.Minor | DigitType.Prerelease), true);
-            Assert.Equal("1.0.3-beta", version.ToString(DigitType.Major | DigitType.Patch | DigitType.Prerelease), true);
-            Assert.Equal("1.0.0-beta", version.ToString(DigitType.Major | DigitType.Prerelease), true);
+            Assert.Equal("1.2.0-beta", version.ToString(DigitType.Major | DigitType.Minor | DigitType.Prerelease, true));
+            Assert.Equal("1.0.3-beta", version.ToString(DigitType.Major | DigitType.Patch | DigitType.Prerelease, true));
+            Assert.Equal("1.0.0-beta", version.ToString(DigitType.Major | DigitType.Prerelease, true));
         }
 
         [Fact]
