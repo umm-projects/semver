@@ -8,6 +8,16 @@ using System.Text.RegularExpressions;
 
 namespace Semver
 {
+    [Flags]
+    public enum DigitType
+    {
+        Major      = 0x01 << 0,
+        Minor      = 0x01 << 1,
+        Patch      = 0x01 << 2,
+        Prerelease = 0x01 << 3,
+        Build      = 0x01 << 4,
+    }
+
     /// <summary>
     /// A semantic version implementation.
     /// Conforms to v2.0.0 of http://semver.org/
