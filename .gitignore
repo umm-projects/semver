@@ -10,3 +10,11 @@ TestResults/
 *.lock.json
 .vs
 *.user
+
+# ======================= #
+# umm (Node.js) generated #
+# ======================= #
+/node_modules/
+/Assets/Modules*
+/package-lock.json
+/yarn.lock
