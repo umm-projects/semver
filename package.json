@@ -2,9 +2,9 @@
   "name": "@umm/semver",
   "version": "1.0.0",
   "description": "A semver implementation in .Net based on the v2.0.0 of the spec found at http://semver.org/.",
-  "homepage": "https://github.com/umm-projects/semver",
+  "homepage": "https://github.com/umm/semver",
   "bugs": {
-    "url": "https://github.com/umm-projects/semver/issues"
+    "url": "https://github.com/umm/semver/issues"
   },
   "scripts": {
     "umm:init": "umm-init",
@@ -18,13 +18,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git@github.com:umm-projects/semver"
+    "url": "git@github.com:umm/semver"
   },
   "files": [
     "src"
   ],
   "dependencies": {
-    "@umm/scripts": "umm-projects/scripts#^1.0.0"
+    "@umm/scripts": "umm/scripts#^1.0.0"
   },
   "devDependencies": {}
 }
