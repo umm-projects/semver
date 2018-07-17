@@ -1,6 +1,6 @@
 {
   "name": "@umm/semver",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A semver implementation in .Net based on the v2.0.0 of the spec found at http://semver.org/.",
   "homepage": "https://github.com/umm/semver",
   "bugs": {
